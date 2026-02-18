@@ -48,7 +48,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 const SizedBox(height: 10,),
                 const Text(
                   "Let's get to know you better.",
-                  \style: TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     color: Colors.grey,
                   ),
@@ -97,6 +97,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   InputDecoration _inputDecoration(String label, IconData icon){
     return InputDecoration(
       labelText: label,
-    )
+      prefixIcon: Icon(icon,color: Colors.grey,),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.grey.shade300),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.grey.shade300),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: Colors.black, width: 2),
+      ),
+    );
   }
 }
