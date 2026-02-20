@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'home_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -13,14 +14,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final TextEditingController _nameController=TextEditingController();
   final TextEditingController _emailController=TextEditingController();
   final TextEditingController _phoneController=TextEditingController();
-  void _submitProfile(){
+  void _submitProfile() async{
     if (_formKey.currentState!.validate()){
-      // to do later store this on local storgae
-      print("User Name: ${_nameController.text}");
-      print("User Email: ${_emailController.text}");
-      Navigator.pushReplacement(context,
-      MaterialPageRoute(builder: (context)=> const HomeScreen()),
+      final prefs= await SharedPreferences.getInstance();
+      await prefs.setString('userName', _nameController.text);
+      prefs.setString('userEmail',_emailController.text);
+      if(mounted){
+        Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (context)=> const HomeScreen()),
       );
+      }
+      
     }
   }
   @override
