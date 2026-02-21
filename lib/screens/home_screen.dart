@@ -139,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () async {
           final newSubscription = await Navigator.push<Subscription>(
             context,
-            MaterialPageRoute(builder: (context) => const ProfileScreen()),
+            MaterialPageRoute(builder: (context) => const AddSubscriptionScreen()),
           );
           if (newSubscription != null) {
             setState(() {
