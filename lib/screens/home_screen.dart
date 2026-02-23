@@ -4,6 +4,8 @@ import '../widgets/subscription_card.dart';
 import 'profile_screen.dart';
 import 'add_subscription_screen.dart';
 import '../screens/profile_screen.dart';
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,8 +15,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final List<Subscription> subscriptions = [];
-
+  List<Subscription> subscriptions = [];
+  @override
+  void initState(){
+    super.initState();
+    loadSubscriptions();
+  }
   double get totalMonthlySpend {
     return subscriptions.fold(0.0, (sum, item) {
       double priceValue = double.tryParse(item.price.toString()) ?? 0.0;
@@ -23,7 +29,23 @@ class _HomeScreenState extends State<HomeScreen> {
       return sum + priceValue;
     });
   }
+  Future<void> saveSubscription() async{
+    final prefs =await SharedPreferences.getInstance();
+    final String encodedData= json.encode(subscriptions.map((sub)=> sub.toMap()).toList());
+    await prefs.setString('subscriptions_key',encodedData);
+  }
+  Future<void> loadSubscriptions() async{
+    final prefs= await SharedPreferences.getInstance();
+    final String? savedData=prefs.getString('subscriptions_key');
 
+    if(savedData!=null){
+      final List<dynamic> decodedData= json.decode(savedData);
+      setState(() {
+        subscriptions=decodedData.map((item)=> Subscription.fromMap(item))
+        .toList();
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,9 +127,56 @@ class _HomeScreenState extends State<HomeScreen> {
                   : ListView.builder(
                       itemCount: subscriptions.length,
                       itemBuilder: (context, index) {
-                        return SubscriptionCard(subscription: subscriptions[index]);
+                        final sub = subscriptions[index]; 
+                        
+                        return Dismissible(
+                          key: Key(sub.id), 
+                          direction: DismissDirection.endToStart, 
+                          background: Container(
+                            alignment: Alignment.centerRight,
+                            padding: const EdgeInsets.only(right: 24),
+                            margin: const EdgeInsets.only(bottom: 16),
+                            decoration: BoxDecoration(
+                              color: Colors.red.shade400,
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                            child: const Icon(Icons.delete_sweep, color: Colors.white, size: 32),
+                          ),
+                          
+                          onDismissed: (direction) {
+
+                            final deletedSub = sub;
+                            final deletedIndex = index;
+
+                            setState(() {
+                              subscriptions.removeAt(index);
+                            });
+                            
+                            saveSubscription(); 
+
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("${deletedSub.name} deleted"),
+                                backgroundColor: Colors.black87,
+                                duration: const Duration(seconds: 3), 
+                                action: SnackBarAction(
+                                  label: 'UNDO',
+                                  textColor: Colors.greenAccent, 
+                                  onPressed: () {
+                                    setState(() {
+                                      subscriptions.insert(deletedIndex, deletedSub);
+                                    });
+                                    saveSubscription(); 
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                          child: SubscriptionCard(subscription: sub),
+                        );
                       },
-                    ),
+                    )
             ),
           ],
         ),
@@ -145,6 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
             setState(() {
               subscriptions.add(newSubscription);
             });
+            saveSubscription();
           }
         },
       ),
