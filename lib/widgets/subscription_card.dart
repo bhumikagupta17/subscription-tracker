@@ -25,7 +25,7 @@ class _SubscriptionCardState extends State<SubscriptionCard> {
   }
   Future<void> updatePalette() async{
     final String cleanName=widget.subscription.name.trim().toLowerCase().replaceAll(' ', '');
-    final String logoUrl="https://logo.clearbit.com/$cleanName.com";
+    final String logoUrl = "https://www.google.com/s2/favicons?domain=$cleanName.com&sz=128";
     try {
       final PaletteGenerator generator=await PaletteGenerator.fromImageProvider(
         CachedNetworkImageProvider(logoUrl),
@@ -95,7 +95,7 @@ class _SubscriptionCardState extends State<SubscriptionCard> {
                   color: Colors.white,
                   shape: BoxShape.circle,
                   image: DecorationImage(image: CachedNetworkImageProvider(
-                    "https://logo.clearbit.com/${widget.subscription.name.trim().toLowerCase().replaceAll(' ', '')}.com"
+                    "https://www.google.com/s2/favicons?domain=${widget.subscription.name.trim().toLowerCase().replaceAll(' ', '')}.com&sz=128"
                   ),
                   fit: BoxFit.cover,
                   onError: (e,s){},),
