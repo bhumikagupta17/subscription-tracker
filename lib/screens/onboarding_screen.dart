@@ -14,11 +14,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final TextEditingController _nameController=TextEditingController();
   final TextEditingController _emailController=TextEditingController();
   final TextEditingController _phoneController=TextEditingController();
+  
   void _submitProfile() async{
     if (_formKey.currentState!.validate()){
       final prefs= await SharedPreferences.getInstance();
       await prefs.setString('userName', _nameController.text);
-      prefs.setString('userEmail',_emailController.text);
+      await prefs.setString('userEmail',_emailController.text);
+
+      await prefs.setBool('hasSeenOnboard', true);
       if(mounted){
         Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (context)=> const HomeScreen()),

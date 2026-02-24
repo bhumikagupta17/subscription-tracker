@@ -21,6 +21,46 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     loadSubscriptions();
   }
+  int calculateDaysLeft(Subscription sub){
+    final now=DateTime.now();
+    final today=DateTime(now.year,now.month,now.day);
+    final start=DateTime(sub.startDate.year,sub.startDate.month,sub.startDate.day);
+
+    if(start.isAfter(today)){
+      return start.difference(today).inDays;
+    }
+
+    if(sub.period=="Weekly"){
+      int daysPassed=today.difference(start).inDays;
+      int remainder=daysPassed%7;
+      if(remainder==0) return 0;
+      return 7-remainder;
+    }
+    
+    if(sub.period=="Yearly"){
+      DateTime nextDate=DateTime(today.year,start.month,start.day);
+      if(nextDate.isBefore(today)){
+        nextDate=DateTime(today.year+1,start.month,start.day);
+      }
+      return nextDate.difference(today).inDays;
+    }
+
+    // Monthly
+    DateTime nextDate=DateTime(today.year,today.month,start.day);
+    if(nextDate.isBefore(today)){
+      nextDate=DateTime(today.year,today.month+1,start.day);
+    }
+    return nextDate.difference(today).inDays;
+  }
+  void sortSubscription(){
+    setState(() {
+      subscriptions.sort((a,b){
+        int daysA=calculateDaysLeft(a);
+        int daysB=calculateDaysLeft(b);
+        return daysA.compareTo(daysB);
+      });
+    });
+  }
   double get totalMonthlySpend {
     return subscriptions.fold(0.0, (sum, item) {
       double priceValue = double.tryParse(item.price.toString()) ?? 0.0;
@@ -44,6 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
         subscriptions=decodedData.map((item)=> Subscription.fromMap(item))
         .toList();
       });
+      sortSubscription();
     }
   }
   @override
@@ -215,6 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
               subscriptions.add(newSubscription);
             });
             saveSubscription();
+            sortSubscription();
           }
         },
       ),

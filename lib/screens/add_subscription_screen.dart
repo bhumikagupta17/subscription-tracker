@@ -67,11 +67,11 @@ return Scaffold(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 1. App Name Input
+              // 1. Subscription Name Input
               TextFormField(
                 controller: nameController,
                 decoration: InputDecoration(
-                  labelText: 'App Name (e.g., Netflix)',
+                  labelText: 'Subscription Name (e.g., Netflix,Gym)',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
                   prefixIcon: const Icon(Icons.apps),
                 ),
