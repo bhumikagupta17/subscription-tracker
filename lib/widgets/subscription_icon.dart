@@ -8,13 +8,21 @@ class SubscriptionIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String cleanName= name.trim().toLowerCase().replaceAll(' ', '');
-    final logoUrl= "https://logo.clearbit.com/$cleanName.com";
+    final logoUrl= "https://www.google.com/s2/favicons?domain=${cleanName}.com&sz=128";
 
     return Container(
       width: size,
       height: size,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         shape: BoxShape.circle,
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: ClipOval(
         child: Image.network(logoUrl,
@@ -57,7 +65,7 @@ class SubscriptionIcon extends StatelessWidget {
     );
   }
   Color _getColorForName(String text){
-    final colors=[Colors.blue, Colors.red, Colors.green, Colors.orange, Colors.purple, Colors.teal, Colors.pinkAccent];
-    return colors[text.hashCode.abs()%colors.length];
+    final color=Colors.grey.shade500;
+    return color;
   }
 }

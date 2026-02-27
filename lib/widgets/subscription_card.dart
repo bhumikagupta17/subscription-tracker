@@ -88,20 +88,7 @@ class _SubscriptionCardState extends State<SubscriptionCard> {
           padding: const EdgeInsets.all(20),
           child: Row(
             children: [
-              Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                  image: DecorationImage(image: CachedNetworkImageProvider(
-                    "https://www.google.com/s2/favicons?domain=${widget.subscription.name.trim().toLowerCase().replaceAll(' ', '')}.com&sz=128"
-                  ),
-                  fit: BoxFit.cover,
-                  onError: (e,s){},),
-                  
-                ),
-              ),
+              SubscriptionIcon(name: widget.subscription.name, size: 55),
               const SizedBox(width: 16,),
               Expanded(child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
