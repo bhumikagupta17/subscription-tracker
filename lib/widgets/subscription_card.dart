@@ -110,7 +110,7 @@ class _SubscriptionCardState extends State<SubscriptionCard> {
                     widget.subscription.name,
                     style: TextStyle(
                       color: textColor,
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -118,7 +118,7 @@ class _SubscriptionCardState extends State<SubscriptionCard> {
                     "₹${widget.subscription.price} / ${widget.subscription.period}",
                     style: TextStyle(
                       color: textColor.withOpacity(0.7),
-                      fontSize: 14,
+                      fontSize: 16,
                     ),
                   )
                 ],
@@ -144,7 +144,7 @@ class _SubscriptionCardState extends State<SubscriptionCard> {
                         "days",
                         style: TextStyle(
                           color: textColor.withOpacity(0.7),
-                          fontSize: 10,
+                          fontSize: 14,
                       ),
                       )
                     ],

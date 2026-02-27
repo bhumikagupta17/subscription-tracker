@@ -112,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
-            fontSize: 24,
+            fontSize: 26,
           ),
         ),
       ),
@@ -141,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   const Text(
                     "Total Monthly Spend",
-                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                    style: TextStyle(color: Colors.white70, fontSize: 16),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -156,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
             
             const Text(
               "Your Active Plans", 
-              style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold)
+              style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold)
             ),
             
             const SizedBox(height: 16),
@@ -242,8 +242,8 @@ class _HomeScreenState extends State<HomeScreen> {
         showSelectedLabels: false,
         showUnselectedLabels: false,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_filled, size: 28), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline, size: 28), label: "Profile"),
+          BottomNavigationBarItem(icon: Icon(Icons.home_filled, size: 32), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.person_outline, size: 32), label: "Profile"),
         ],
         onTap: (index) {
           if (index == 1) {

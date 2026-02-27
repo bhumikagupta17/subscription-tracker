@@ -210,7 +210,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: const Text("My Profile", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        title: const Text("My Profile", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold,fontSize: 24)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
@@ -243,7 +243,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: 16),
                   Text(userName, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black)),
                   const SizedBox(height: 4),
-                  Text(userEmail, style: TextStyle(fontSize: 14, color: Colors.grey.shade600)),
+                  Text(userEmail, style: TextStyle(fontSize: 16, color: Colors.grey.shade600)),
                 ],
               ),
             ),
@@ -317,7 +317,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const SizedBox(height: 16),
           Text(value, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
           const SizedBox(height: 4),
-          Text(title, style: const TextStyle(color: Colors.white70, fontSize: 12)),
+          Text(title, style: const TextStyle(color: Colors.white70, fontSize: 14)),
         ],
       ),
     );
@@ -331,7 +331,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         decoration: BoxDecoration(color: isDestructive ? Colors.red.withOpacity(0.1) : Colors.grey.shade100, shape: BoxShape.circle),
         child: Icon(icon, color: isDestructive ? Colors.red : Colors.black, size: 20),
       ),
-      title: Text(title, style: TextStyle(fontWeight: FontWeight.w600, color: isDestructive ? Colors.red : Colors.black)),
+      title: Text(title, style: TextStyle(fontWeight: FontWeight.w600, color: isDestructive ? Colors.red : Colors.black,fontSize: 18)),
       trailing: showArrow ? const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey) : null,
       onTap: onTap,
     );
@@ -345,7 +345,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         decoration: BoxDecoration(color: Colors.grey.shade100, shape: BoxShape.circle),
         child: Icon(icon, color: Colors.black, size: 20),
       ),
-      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.black)),
+      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.black,fontSize: 18)),
       value: currentValue,
       activeColor: const Color.fromARGB(255, 23, 168, 71), 
       onChanged: onChanged,
