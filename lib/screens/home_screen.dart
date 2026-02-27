@@ -16,28 +16,26 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String userName="";
+  bool _showYearly=false;
   List<Subscription> subscriptions = [];
   @override
   void initState(){
     super.initState();
-    loadUserName();
+    loadProfileData();
     loadSubscriptions();
   }
-  Future<void> loadUserName() async{
-    final prefs=await SharedPreferences.getInstance();
-    String savedName=prefs.getString('userName')??'User';
-    if(savedName.isNotEmpty){
-      savedName='${savedName[0].toUpperCase()}${savedName.substring(1)}';
-    }
-    setState(() {
-      userName=savedName;
-    });
-  }
+
   Future<void> loadProfileData() async{
     final prefs= await SharedPreferences.getInstance();
-    String savedName=prefs.getString('userName')??'User';
+    String? savedName=prefs.getString('userName')??'User';
+    bool? savedYearly=prefs.getBool('showYearlyProjection')?? false;
     setState(() {
-      userName='${savedName[0].toUpperCase()}${savedName.substring(1)}';
+      if(savedName!=null && savedName.isNotEmpty){
+        userName='${savedName[0].toUpperCase()}${savedName.substring(1)}';
+      }else{
+        userName='User';
+      }
+      _showYearly=savedYearly?? false;
     });
   }
   int calculateDaysLeft(Subscription sub){
@@ -108,6 +106,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   @override
   Widget build(BuildContext context) {
+    double monthlySpend=totalMonthlySpend;
+
+    double displayAmount=_showYearly? (monthlySpend*12):monthlySpend;
+    String displayLabel=_showYearly?"Total Yearly Spend":"Total Monthly Spend";
+
     return Scaffold(
       backgroundColor: Colors.grey[100], 
       appBar: AppBar(
@@ -146,13 +149,12 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Total Monthly Spend",
-                    style: TextStyle(color: Colors.white70, fontSize: 16),
+                   Text(displayLabel,
+                    style: TextStyle(color: Colors.white70, fontSize: 16,fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    "₹${totalMonthlySpend.toStringAsFixed(0)}",
+                    "₹${displayAmount.toStringAsFixed(0)}",
                     style: const TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.bold),
                   ),
                 ],

@@ -15,7 +15,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String userName = "Loading...";
   String userEmail = "Loading...";
 
-  bool _notificationsEnabled = true;
+  bool _showYearlyProjection = false;
 
   @override
   void initState() {
@@ -28,16 +28,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() {
       userName = prefs.getString('userName') ?? 'Guest User';
       userEmail = prefs.getString('userEmail') ?? "No Email provided";
-      _notificationsEnabled = prefs.getBool('notificationsEnabled') ?? true;
+      _showYearlyProjection = prefs.getBool('showYearlyProjection') ?? false;
     });
   }
 
-  Future<void> _toggleNotifications(bool value) async {
+  Future<void> _toggleYearlyProjection(bool value) async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _notificationsEnabled = value;
+      _showYearlyProjection = value;
     });
-    await prefs.setBool('notificationsEnabled', value); 
+    await prefs.setBool('showYearlyProjection', value); 
   }
 
   void _showEditProfileDialog() {
@@ -273,10 +273,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   
                   // Notifications Toggle
                   _buildToggleTile(
-                    Icons.notifications_active_outlined, 
-                    "Allow Notifications", 
-                    _notificationsEnabled, 
-                    _toggleNotifications
+                    Icons.calendar_month, 
+                    "Show Yearly Projection", 
+                    _showYearlyProjection, 
+                    _toggleYearlyProjection
                   ),
                   const Divider(height: 2, indent: 20, endIndent: 20, color: Color(0xFFEEEEEE)),
                   _buildListTile(Icons.question_mark, "FAQ's", true, onTap: _showFaq),
