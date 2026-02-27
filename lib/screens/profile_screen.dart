@@ -85,7 +85,85 @@ class _ProfileScreenState extends State<ProfileScreen> {
       },
     );
   }
-
+  void _showFaq(){
+    List<Map<String,String>> faqData=[
+      {
+        "question": "How do I delete a subscription?",
+        "answer": "Simply swipe left on any subscription card on the Home Screen to delete it."
+      },
+      {
+        "question": "How is the total monthly spend calculated?",
+        "answer": "We take all your plans and convert them to their monthly equivalent. For example, a yearly plan's cost is divided by 12."
+      },
+      {
+        "question": "Can I edit an existing subscription?",
+        "answer": "Currently, you can delete a subscription and add a new one. Editing is a feature coming in a future update!"
+      },
+      {
+        "question": "Is my data safe?",
+        "answer": "Yes! All your profile and subscription data is saved locally directly on your device. We do not store it on any external servers."
+      }
+    ];
+    showModalBottomSheet(context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.white,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+    ),
+     builder: (context){
+      return DraggableScrollableSheet(
+        initialChildSize: 0.6,
+        minChildSize: 0.4,
+        maxChildSize: 0.9,
+        expand: false,
+        builder: (context,scrollController){
+          return Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 12),
+                height: 5,
+                width: 40,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(bottom: 16,top: 8),
+                child: Text("Frequently Asked Questions",
+                style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),),
+                Expanded(child: ListView.builder(
+                  controller: scrollController,
+                  itemCount: faqData.length,
+                  itemBuilder:(context,index){
+                    return Card(
+                      margin: EdgeInsets.symmetric(horizontal: 16,vertical: 6),
+                      elevation: 0,
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(color: Colors.grey.shade200),
+                      ),
+                      child: ExpansionTile(title: Text(
+                        faqData[index]["question"]!,
+                        style:const TextStyle(fontWeight: FontWeight.w600,color: Colors.black),
+                      ),
+                      iconColor: Colors.black,
+                      collapsedIconColor: Colors.grey,
+                      children: [
+                        Padding(padding: const EdgeInsets.only(left: 16,right: 16,bottom: 16),
+                        child: Text(faqData[index]["answer"]!,
+                        style: TextStyle(color: Colors.grey.shade700,height: 1.5),),)
+                      ],
+                      ),
+                    );
+                  } ))
+            ],
+          );
+        }
+        );
+     });
+  }
   void _logOut() async {
     bool? confirm = await showDialog(
       context: context,
@@ -191,7 +269,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 children: [
                   _buildListTile(Icons.edit, "Edit Profile", true, onTap: _showEditProfileDialog),
-                  const Divider(height: 1, indent: 20, endIndent: 20, color: Color(0xFFEEEEEE)),
+                  const Divider(height: 2, indent: 20, endIndent: 20, color: Color(0xFFEEEEEE)),
                   
                   // Notifications Toggle
                   _buildToggleTile(
@@ -200,9 +278,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     _notificationsEnabled, 
                     _toggleNotifications
                   ),
-                  const Divider(height: 1, indent: 20, endIndent: 20, color: Color(0xFFEEEEEE)),
-                  const Divider(height: 1, indent: 20, endIndent: 20, color: Color(0xFFEEEEEE)),
-                  
+                  const Divider(height: 2, indent: 20, endIndent: 20, color: Color(0xFFEEEEEE)),
+                  _buildListTile(Icons.question_mark, "FAQ's", true, onTap: _showFaq),
+                  const Divider(height: 2, indent: 20, endIndent: 20, color: Color(0xFFEEEEEE)),
                   // Logout
                   _buildListTile(Icons.logout, "Log Out", false, isDestructive: true, onTap: _logOut),
                 ],
@@ -269,7 +347,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.black)),
       value: currentValue,
-      activeColor: Colors.black, 
+      activeColor: const Color.fromARGB(255, 23, 168, 71), 
       onChanged: onChanged,
     );
   }
