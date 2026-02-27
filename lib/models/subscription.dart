@@ -54,7 +54,7 @@ class Subscription{
     return Subscription(id: map['id'], 
     name: map['name'], 
     price: map['price'], 
-    startDate: map['startDate'], 
+    startDate: DateTime.parse(map['startDate']), 
     period: map['period'],
     category: map['category']?? 'Other');
   }

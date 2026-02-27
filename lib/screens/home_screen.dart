@@ -4,7 +4,6 @@ import '../widgets/subscription_card.dart';
 import 'profile_screen.dart';
 import 'add_subscription_screen.dart';
 import 'dart:convert';
-import 'onboarding_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -206,7 +205,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           
                           onDismissed: (direction) {
-
                             final deletedSub = sub;
                             final deletedIndex = index;
 
@@ -278,7 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
             setState(() {
               subscriptions.add(newSubscription);
             });
-            saveSubscription();
+            await saveSubscription();
             sortSubscription();
           }
         },
