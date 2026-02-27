@@ -33,6 +33,13 @@ class _HomeScreenState extends State<HomeScreen> {
       userName=savedName;
     });
   }
+  Future<void> loadProfileData() async{
+    final prefs= await SharedPreferences.getInstance();
+    String savedName=prefs.getString('userName')??'User';
+    setState(() {
+      userName='${savedName[0].toUpperCase()}${savedName.substring(1)}';
+    });
+  }
   int calculateDaysLeft(Subscription sub){
     final now=DateTime.now();
     final today=DateTime(now.year,now.month,now.day);
@@ -102,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50], 
+      backgroundColor: Colors.grey[100], 
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
@@ -245,12 +252,14 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.home_filled, size: 32), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.person_outline, size: 32), label: "Profile"),
         ],
-        onTap: (index) {
+        onTap: (index) async {
           if (index == 1) {
-            Navigator.push(
+            await Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ProfileScreen(subscriptions: subscriptions)),
+              MaterialPageRoute(builder: 
+              (context) => ProfileScreen(subscriptions: subscriptions)),
             );
+            loadProfileData();
           }
         },
       ),
