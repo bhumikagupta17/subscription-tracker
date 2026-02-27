@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Subscription Tracker',
       debugShowCheckedModeBanner: false,
-      home: showHome ? const HomeScreen() : const OnboardingScreen(),
+      home: showHome ?  const HomeScreen() : const OnboardingScreen(),
     );
   }
 }

@@ -70,6 +70,7 @@ return Scaffold(
               // 1. Subscription Name Input
               TextFormField(
                 controller: nameController,
+                textCapitalization: TextCapitalization.words,
                 decoration: InputDecoration(
                   labelText: 'Subscription Name (e.g., Netflix,Gym)',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),

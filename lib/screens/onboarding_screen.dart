@@ -24,7 +24,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       await prefs.setBool('hasSeenOnboard', true);
       if(mounted){
         Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context)=> const HomeScreen()),
+        MaterialPageRoute(builder: (context)=>  HomeScreen()),
       );
       }
       
@@ -63,6 +63,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 const SizedBox(height: 50,),
                 TextFormField(
                   controller: _nameController,
+                  textCapitalization: TextCapitalization.words,
                   validator: (value) => value!.isEmpty? "Please enter your name":null,
                   decoration: _inputDecoration("Name", Icons.person_outline),
                 ) ,

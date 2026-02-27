@@ -3,8 +3,8 @@ import '../models/subscription.dart';
 import '../widgets/subscription_card.dart';
 import 'profile_screen.dart';
 import 'add_subscription_screen.dart';
-import '../screens/profile_screen.dart';
 import 'dart:convert';
+import 'onboarding_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,11 +15,23 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String userName="";
   List<Subscription> subscriptions = [];
   @override
   void initState(){
     super.initState();
+    loadUserName();
     loadSubscriptions();
+  }
+  Future<void> loadUserName() async{
+    final prefs=await SharedPreferences.getInstance();
+    String savedName=prefs.getString('userName')??'User';
+    if(savedName.isNotEmpty){
+      savedName='${savedName[0].toUpperCase()}${savedName.substring(1)}';
+    }
+    setState(() {
+      userName=savedName;
+    });
   }
   int calculateDaysLeft(Subscription sub){
     final now=DateTime.now();
@@ -95,8 +107,8 @@ class _HomeScreenState extends State<HomeScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         elevation: 0, 
-        title: const Text(
-          "My Subscriptions",
+        title:  Text(
+          "$userName's Subscriptions",
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
