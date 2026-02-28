@@ -17,6 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String userName="";
   bool _showYearly=false;
   List<Subscription> subscriptions = [];
+
   @override
   void initState(){
     super.initState();
@@ -37,46 +38,8 @@ class _HomeScreenState extends State<HomeScreen> {
       _showYearly=savedYearly?? false;
     });
   }
-  int calculateDaysLeft(Subscription sub){
-    final now=DateTime.now();
-    final today=DateTime(now.year,now.month,now.day);
-    final start=DateTime(sub.startDate.year,sub.startDate.month,sub.startDate.day);
 
-    if(start.isAfter(today)){
-      return start.difference(today).inDays;
-    }
 
-    if(sub.period=="Weekly"){
-      int daysPassed=today.difference(start).inDays;
-      int remainder=daysPassed%7;
-      if(remainder==0) return 0;
-      return 7-remainder;
-    }
-    
-    if(sub.period=="Yearly"){
-      DateTime nextDate=DateTime(today.year,start.month,start.day);
-      if(nextDate.isBefore(today)){
-        nextDate=DateTime(today.year+1,start.month,start.day);
-      }
-      return nextDate.difference(today).inDays;
-    }
-
-    // Monthly
-    DateTime nextDate=DateTime(today.year,today.month,start.day);
-    if(nextDate.isBefore(today)){
-      nextDate=DateTime(today.year,today.month+1,start.day);
-    }
-    return nextDate.difference(today).inDays;
-  }
-  void sortSubscription(){
-    setState(() {
-      subscriptions.sort((a,b){
-        int daysA=calculateDaysLeft(a);
-        int daysB=calculateDaysLeft(b);
-        return daysA.compareTo(daysB);
-      });
-    });
-  }
   double get totalMonthlySpend {
     return subscriptions.fold(0.0, (sum, item) {
       double priceValue = double.tryParse(item.price.toString()) ?? 0.0;
@@ -85,28 +48,48 @@ class _HomeScreenState extends State<HomeScreen> {
       return sum + priceValue;
     });
   }
+
+
   Future<void> saveSubscription() async{
     final prefs =await SharedPreferences.getInstance();
     final String encodedData= json.encode(subscriptions.map((sub)=> sub.toMap()).toList());
     await prefs.setString('subscriptions_key',encodedData);
   }
+
+
   Future<void> loadSubscriptions() async{
     final prefs= await SharedPreferences.getInstance();
     final String? savedData=prefs.getString('subscriptions_key');
 
     if(savedData!=null){
       final List<dynamic> decodedData= json.decode(savedData);
+      final List<Subscription> loadedList=decodedData
+      .map((item)=> Subscription.fromMap(item)).
+      toList();
+
       setState(() {
-        subscriptions=decodedData.map((item)=> Subscription.fromMap(item))
-        .toList();
+        subscriptions=loadedList;
       });
-      sortSubscription();
     }
   }
+
+
   @override
   Widget build(BuildContext context) {
-    double monthlySpend=totalMonthlySpend;
 
+    List<Subscription> sortedSubscriptions = List.from(subscriptions);
+    sortedSubscriptions.sort((a, b) {
+      
+      int daysA = a.nextBillDate.difference(DateTime.now()).inDays;
+      int daysB = b.nextBillDate.difference(DateTime.now()).inDays;
+      
+      if (daysA != daysB) {
+        return daysA.compareTo(daysB);
+      }
+      return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+    });
+
+    double monthlySpend=totalMonthlySpend;
     double displayAmount=_showYearly? (monthlySpend*12):monthlySpend;
     String displayLabel=_showYearly?"Total Yearly Spend":"Total Monthly Spend";
 
@@ -186,12 +169,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     )
                   : ListView.builder(
-                      itemCount: subscriptions.length,
+                      itemCount: sortedSubscriptions.length,
                       itemBuilder: (context, index) {
-                        final sub = subscriptions[index]; 
+                        final sub = sortedSubscriptions[index]; 
                         
                         return Dismissible(
-                          key: Key(sub.id), 
+                          key: ValueKey(sub.id), 
                           direction: DismissDirection.endToStart, 
                           background: Container(
                             alignment: Alignment.centerRight,
@@ -277,7 +260,6 @@ class _HomeScreenState extends State<HomeScreen> {
               subscriptions.add(newSubscription);
             });
             await saveSubscription();
-            sortSubscription();
           }
         },
       ),

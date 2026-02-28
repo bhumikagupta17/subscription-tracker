@@ -43,7 +43,7 @@ class _AddSubscriptionScreenState extends State<AddSubscriptionScreen> {
   void saveSubscription(){
     if(formKey.currentState!.validate()){
       final newSub= Subscription(
-        id: DateTime.now().toString(), 
+        id: DateTime.now().millisecondsSinceEpoch.toString(), 
         name: nameController.text.trim(), 
         price: priceController.text, 
         startDate: selectedDate, period: selectedPeriod);
